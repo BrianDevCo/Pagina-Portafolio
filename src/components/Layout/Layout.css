@@ -59,6 +59,22 @@
   --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
+.layout {
+  min-height: 100vh;
+  background: transparent;
+  color: var(--text-primary);
+  transition: all var(--transition-normal);
+  position: relative;
+  z-index: 10; /* Por debajo de las partículas pero por encima del fondo */
+}
+
+.main-content {
+  padding-top: 70px; /* Altura del header */
+  min-height: calc(100vh - 70px);
+  position: relative;
+  z-index: 10; /* Por debajo de las partículas pero por encima del fondo */
+}
+
 /* Estilos globales */
 * {
   box-sizing: border-box;
@@ -71,7 +87,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: transparent;
+  background: var(--bg-primary);
   color: var(--text-primary);
   transition: all var(--transition-normal);
 }
@@ -104,6 +120,66 @@ body {
 *:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
+}
+
+/* Asegurar que elementos interactivos estén por encima de las partículas */
+button, a, input, textarea, select, [role="button"], [tabindex] {
+  position: relative;
+  z-index: 100;
+}
+
+/* Asegurar que textos y contenido estén por encima de las partículas */
+h1, h2, h3, h4, h5, h6, p, span, div, section, article, aside, nav, header, footer, main {
+  position: relative;
+  z-index: 100;
+}
+
+/* Asegurar que imágenes y tarjetas estén por encima de las partículas */
+img, .card, .project-card, .skill-card, .experience-card {
+  position: relative;
+  z-index: 100;
+}
+
+/* Asegurar que páginas individuales estén por encima de las partículas */
+.home, .projects, .skills, .experience, .contact {
+  position: relative;
+  z-index: 100;
+}
+
+/* Asegurar que contenedores de contenido estén por encima de las partículas */
+.container, .section, .hero, .projects-grid, .skills-grid, .experience-timeline {
+  position: relative;
+  z-index: 100;
+}
+
+/* Elementos específicos que deben estar por encima de las partículas */
+.logo, .nav, .nav-link, .header-actions, .theme-toggle, .menu-toggle, .golden-counter {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Botones específicos importantes */
+.btn, .cta-button, .download-btn, .contact-btn, button, a {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Textos importantes */
+.hero-title, .hero-description, .section-title, .project-title, .skill-name, h1, h2, h3, h4, h5, h6, p, span {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Imágenes y elementos visuales */
+img, .profile-image, .project-image {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Contenedores principales */
+.container, .hero, .section, .main-content {
+  position: relative !important;
+  z-index: 1000 !important;
 }
 
 /* Animaciones de entrada */

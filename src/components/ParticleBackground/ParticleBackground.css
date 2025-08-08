@@ -1,0 +1,27 @@
+.particle-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999; /* Por encima de todo el contenido */
+  background: transparent;
+}
+
+/* Asegurar que el canvas no interfiera con otros elementos */
+.particle-background canvas {
+  display: block;
+}
+
+/* Efecto de transición suave para cambios de tema */
+.particle-background {
+  transition: opacity 0.3s ease;
+}
+
+/* Optimización para dispositivos móviles */
+@media (max-width: 768px) {
+  .particle-background {
+    pointer-events: none; /* Deshabilitar en móviles para mejor rendimiento */
+  }
+}
