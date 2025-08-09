@@ -74,6 +74,41 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
     }
   };
 
+  // Función para dibujar una estrellita
+  const drawStar = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, color: string) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(size / 10, size / 10); // Escalar la estrella
+    
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    
+    // Dibujar una estrella de 5 puntas
+    for (let i = 0; i < 5; i++) {
+      const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+      const nextAngle = ((i + 1) * 4 * Math.PI) / 5 - Math.PI / 2;
+      
+      const outerRadius = 5;
+      const innerRadius = 2;
+      
+      const x1 = Math.cos(angle) * outerRadius;
+      const y1 = Math.sin(angle) * outerRadius;
+      const x2 = Math.cos(angle + Math.PI / 5) * innerRadius;
+      const y2 = Math.sin(angle + Math.PI / 5) * innerRadius;
+      
+      if (i === 0) {
+        ctx.moveTo(x1, y1);
+      } else {
+        ctx.lineTo(x1, y1);
+      }
+      ctx.lineTo(x2, y2);
+    }
+    
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -246,35 +281,26 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
           particle.isGolden = false;
         }
 
-        // Dibujar partícula con efecto de agujero negro
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        
-        // Efecto especial para partículas cerca del agujero negro
+        // Dibujar partícula como estrellita con efecto de agujero negro
         if (distance < mouseRadius && distance > 0) {
           // Color negro para el agujero negro
-          ctx.fillStyle = `rgba(0, 0, 0, ${0.8 + (force * 0.2)})`;
+          const blackColor = `rgba(0, 0, 0, ${0.8 + (force * 0.2)})`;
           
           // Añadir un halo oscuro alrededor
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size * 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(0, 0, 0, ${force * 0.3})`;
-          ctx.fill();
+          drawStar(ctx, particle.x, particle.y, particle.size * 1.5, `rgba(0, 0, 0, ${force * 0.3})`);
           
-          // Volver a dibujar la partícula principal
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(0, 0, 0, ${0.8 + (force * 0.2)})`;
+          // Dibujar la estrellita principal
+          drawStar(ctx, particle.x, particle.y, particle.size, blackColor);
         } else {
           // Color normal para partículas lejos del agujero negro
+          let starColor;
           if (currentTheme === 'dark') {
-            ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+            starColor = `rgba(255, 255, 255, ${particle.opacity})`;
           } else {
-            ctx.fillStyle = particle.color;
+            starColor = particle.color;
           }
+          drawStar(ctx, particle.x, particle.y, particle.size, starColor);
         }
-        
-        ctx.fill();
       });
 
       // Procesar partícula dorada
