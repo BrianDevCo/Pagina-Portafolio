@@ -307,8 +307,8 @@ const Skills: React.FC = () => {
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ 
-                  y: -10, 
-                  scale: 1.05,
+                  y: -5, 
+                  scale: 1.02,
                   transition: { duration: 0.3 }
                 }}
               >

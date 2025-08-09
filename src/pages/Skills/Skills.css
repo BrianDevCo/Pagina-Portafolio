@@ -91,8 +91,8 @@
 }
 
 .skill-card:hover {
-  transform: translateY(-10px) scale(1.05);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--shadow-lg);
   border-color: var(--accent-color);
   z-index: 10;
   background: var(--bg-primary);
@@ -106,8 +106,9 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.5s;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transition: left 0.8s ease;
+  pointer-events: none;
 }
 
 .skill-card:hover::before {
@@ -180,16 +181,19 @@
 /* Estilos para la información detallada en hover */
 .skill-details {
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--border-color);
+  max-height: 0;
+  overflow: hidden;
 }
 
 .skill-card:hover .skill-details {
   opacity: 1;
   transform: translateY(0);
+  max-height: 300px;
 }
 
 .skill-detailed-description {
