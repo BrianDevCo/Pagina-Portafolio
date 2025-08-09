@@ -228,11 +228,12 @@
 }
 
 .skill-use-cases li::before {
-  content: '•';
-  color: var(--accent-color);
+  content: '★';
+  color: #87CEEB;
   font-weight: bold;
   position: absolute;
   left: 0;
+  font-size: 0.9rem;
 }
 
 .skills-summary {
