@@ -78,7 +78,7 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
   const drawStar = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, color: string) => {
     ctx.save();
     ctx.translate(x, y);
-    ctx.scale(size / 10, size / 10); // Escalar la estrella
+    ctx.scale(size / 5, size / 5); // Escalar la estrella (más grande)
     
     ctx.beginPath();
     ctx.fillStyle = color;
@@ -88,8 +88,8 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
       const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
       const nextAngle = ((i + 1) * 4 * Math.PI) / 5 - Math.PI / 2;
       
-      const outerRadius = 5;
-      const innerRadius = 2;
+      const outerRadius = 8; // Radio exterior más grande
+      const innerRadius = 3; // Radio interior más grande
       
       const x1 = Math.cos(angle) * outerRadius;
       const y1 = Math.sin(angle) * outerRadius;
