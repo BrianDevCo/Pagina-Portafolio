@@ -85,12 +85,33 @@
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
   transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .skill-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: var(--shadow-xl);
   border-color: var(--accent-color);
+  z-index: 10;
+  background: var(--bg-primary);
+}
+
+/* Efecto de brillo en hover */
+.skill-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.skill-card:hover::before {
+  left: 100%;
 }
 
 .skill-header {
@@ -153,6 +174,61 @@
   font-size: 0.875rem;
   line-height: 1.5;
   margin: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Estilos para la información detallada en hover */
+.skill-details {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.skill-card:hover .skill-details {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.skill-detailed-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+  font-style: italic;
+}
+
+.skill-use-cases h4 {
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  margin-top: 0;
+}
+
+.skill-use-cases ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skill-use-cases li {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-sm);
+  position: relative;
+}
+
+.skill-use-cases li::before {
+  content: '•';
+  color: var(--accent-color);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
 }
 
 .skills-summary {
@@ -225,6 +301,23 @@
 
   .skill-card {
     padding: var(--spacing-md);
+  }
+
+  .skill-details {
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+  }
+
+  .skill-detailed-description {
+    font-size: 0.8rem;
+  }
+
+  .skill-use-cases h4 {
+    font-size: 0.8rem;
+  }
+
+  .skill-use-cases li {
+    font-size: 0.75rem;
   }
 
   .summary-stats {
