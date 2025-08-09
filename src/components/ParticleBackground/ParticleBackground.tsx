@@ -26,6 +26,18 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
   particleSpeed = 0.3,
   particleSize = 1.5
 }) => {
+  // Detectar dispositivos con poca memoria o rendimiento
+  const isLowPerformance = typeof navigator.hardwareConcurrency !== 'undefined' && navigator.hardwareConcurrency < 4;
+  
+  // Detectar si es dispositivo móvil
+  const isMobile = window.innerWidth <= 768;
+  const isSmallMobile = window.innerWidth <= 480;
+  
+  // Ajustar parámetros para móviles
+  const adjustedParticleCount = isLowPerformance ? 500 : isSmallMobile ? 1000 : isMobile ? 2000 : particleCount;
+  const adjustedMouseRadius = isMobile ? 100 : mouseRadius;
+  const adjustedParticleSpeed = isMobile ? 0.2 : particleSpeed;
+  const adjustedParticleSize = isMobile ? 1.0 : particleSize;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
@@ -37,6 +49,8 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
   const lastGoldenSpawnRef = useRef<number>(Date.now());
   const goldenAbsorptionCountRef = useRef<number>(0);
   const goldenParticleSpawnTimeRef = useRef<number>(Date.now());
+  
+
 
   // Colores para el tema claro
   const lightColors = [
@@ -74,16 +88,24 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
     };
 
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      // Reajustar partículas si cambia el tamaño de pantalla
+      const newIsMobile = window.innerWidth <= 768;
+      if (newIsMobile !== isMobile) {
+        // Recrear partículas con nuevos parámetros
+        particlesRef.current = [];
+      }
+    });
 
     // Inicializar partículas
     if (particlesRef.current.length === 0) {
-      particlesRef.current = Array.from({ length: particleCount }, () => ({
+      particlesRef.current = Array.from({ length: adjustedParticleCount }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * particleSpeed,
-        vy: (Math.random() - 0.5) * particleSpeed,
-        size: Math.random() * particleSize + 1,
+        vx: (Math.random() - 0.5) * adjustedParticleSpeed,
+        vy: (Math.random() - 0.5) * adjustedParticleSpeed,
+        size: Math.random() * adjustedParticleSize + 1,
         opacity: Math.random() * 0.5 + 0.5,
         color: getParticleColor(),
         isGolden: false
@@ -143,14 +165,14 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
         let angle = 0;
         
         // EFECTO AGUJERO NEGRO - Atraer partículas hacia el mouse
-        if (distance < mouseRadius && distance > 0) {
+        if (distance < adjustedMouseRadius && distance > 0) {
           console.log('¡AGUJERO NEGRO ACTIVADO! Partícula:', index, 'Distancia:', distance);
           
           // Actualizar última actividad del mouse
           lastMouseActivityRef.current = Date.now();
           
           // Calcular fuerza de atracción (inversa a la repulsión)
-          force = (mouseRadius - distance) / mouseRadius;
+          force = (adjustedMouseRadius - distance) / adjustedMouseRadius;
           angle = Math.atan2(dy, dx);
 
           // Fuerza de atracción muy fuerte para efecto dramático
@@ -265,13 +287,13 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         // EFECTO AGUJERO NEGRO para partícula dorada
-        if (distance < mouseRadius && distance > 0) {
+        if (distance < adjustedMouseRadius && distance > 0) {
           console.log('🌟 ¡PARTÍCULA DORADA EN EL AGUJERO NEGRO!');
           
           // Actualizar última actividad del mouse
           lastMouseActivityRef.current = Date.now();
           
-          const force = (mouseRadius - distance) / mouseRadius;
+          const force = (adjustedMouseRadius - distance) / adjustedMouseRadius;
           const angle = Math.atan2(dy, dx);
 
           // Fuerza de atracción muy fuerte para la partícula dorada
@@ -281,7 +303,7 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
           goldenParticle.vy += Math.sin(angle) * force * blackHoleStrength;
           
           // Efecto de aceleración hacia el centro
-          const centerForce = 1.0 - (distance / mouseRadius);
+          const centerForce = 1.0 - (distance / adjustedMouseRadius);
           goldenParticle.vx += (mouseRef.current.x - goldenParticle.x) * centerForce * 0.15;
           goldenParticle.vy += (mouseRef.current.y - goldenParticle.y) * centerForce * 0.15;
           
